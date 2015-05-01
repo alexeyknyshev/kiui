@@ -1,4 +1,4 @@
-kiUi [![Build Status](https://travis-ci.org/novembermonk/kiui.svg?branch=master)](https://travis-ci.org/novembermonk/kiui)
+kiUi [![Build Status](https://travis-ci.org/novembermonk/kiui.svg?branch=master)](https://travis-ci.org/novembermonk/kiui) <img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/4999/badge.svg"/>
 ====
 
 kiUi is a lightweight auto-layout Ui library, abstracted out from any rendering or input code.

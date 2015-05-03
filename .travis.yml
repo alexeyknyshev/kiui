@@ -18,7 +18,7 @@ before_script:
   - git clone https://github.com/glfw/glfw
   - mkdir glfw/build
   - cd glfw/build
-  - cmake .. -DBUILD_SHARED_LIBS=ON
+  - cmake .. -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF
   - make VERBOSE=1
   - sudo make install
   - cd ../..

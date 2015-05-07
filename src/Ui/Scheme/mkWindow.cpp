@@ -29,7 +29,6 @@ namespace mk
 		, mWindow(window)
 		, mTooltip("Drag me")
 		, mTitle(this->makeappend<Label>(mWindow.name()))
-		, mSpacer(this->makeappend<SpacerX>())
 	{
 		mStyle = &cls();
 		if(mWindow.closable())
@@ -39,6 +38,7 @@ namespace mk
 	bool WindowHeader::leftClick(float x, float y)
 	{
 		UNUSED(x); UNUSED(y);
+		mWindow.activate();
 		mWindow.frame().layer().moveToTop();
 		return true;
 	}
@@ -92,7 +92,7 @@ namespace mk
 
 	bool WindowSizer::leftDragStart(float xPos, float yPos)
 	{
-		UNUSED(yPos);
+		UNUSED(xPos); UNUSED(yPos);
 		mWindow.frame().as<Layer>().moveToTop();
 		return true;
 	}
@@ -162,6 +162,8 @@ namespace mk
 		, mFooter(this->makeappend<WindowFooter>(*this))
 	{
 		mStyle = dock ? &DockWindow::cls() : &Window::cls();
+		if(!this->sizable())
+			mFooter.hide();
 	}
 
 	Window::~Window()
@@ -225,7 +227,7 @@ namespace mk
 
 	void Window::docked()
 	{
-		this->reset(&DockWindow::cls());
+		this->resetStyle(&DockWindow::cls());
 		this->toggleMovable();
 		this->toggleResizable();
 	}
@@ -240,7 +242,7 @@ namespace mk
 
 	void Window::undocked()
 	{
-		this->reset(&Window::cls());
+		this->resetStyle(&Window::cls());
 		this->toggleMovable();
 		this->toggleResizable();
 

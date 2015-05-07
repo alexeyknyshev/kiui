@@ -60,7 +60,7 @@ namespace mk
 	public:
 		LayoutStyle()
 			: IdStruct(index<LayoutStyle>(), cls())
-			, d_flow(FLOW), d_clipping(CLIP), d_opacity(VOID), d_space(AUTO), d_layoutDim(DIM_Y)
+			, d_flow(FLOW), d_clipping(CLIP), d_opacity(VOID), d_space(AUTO), d_layoutDim(DIM_Y), d_align(DimAlign(LEFT, LEFT))
 			, d_span(DimFloat(1.f, 1.f)), d_pivot(DimPivot(FORWARD, FORWARD)), d_updated(0)
 		{}
 
@@ -75,19 +75,20 @@ namespace mk
 		void copy(const LayoutStyle& other, bool inherit = false)
 		{
 			d_flow.copy(other.d_flow, inherit);
-			d_clipping.copy(other.d_clipping.val, inherit);
-			d_opacity.copy(other.d_opacity.val, inherit);
-			d_space.copy(other.d_space.val, inherit);
-			d_layoutDim.copy(other.d_layoutDim.val, inherit);
-			d_span.copy(other.d_span.val, inherit);
-			d_size.copy(other.d_size.val, inherit);
-			d_padding.copy(other.d_padding.val, inherit);
-			d_margin.copy(other.d_margin.val, inherit);
-			d_spacing.copy(other.d_spacing.val, inherit);
-			d_pivot.copy(other.d_pivot.val, inherit);
-			d_sizing.copy(other.d_sizing.val, inherit);
-			d_weight.copy(other.d_weight.val, inherit);
-			d_weights.copy(other.d_weights.val, inherit);
+			d_clipping.copy(other.d_clipping, inherit);
+			d_opacity.copy(other.d_opacity, inherit);
+			d_space.copy(other.d_space, inherit);
+			d_layoutDim.copy(other.d_layoutDim, inherit);
+			d_align.copy(other.d_align, inherit);
+			d_span.copy(other.d_span, inherit);
+			d_size.copy(other.d_size, inherit);
+			d_padding.copy(other.d_padding, inherit);
+			d_margin.copy(other.d_margin, inherit);
+			d_spacing.copy(other.d_spacing, inherit);
+			d_pivot.copy(other.d_pivot, inherit);
+			d_sizing.copy(other.d_sizing, inherit);
+			d_weight.copy(other.d_weight, inherit);
+			d_weights.copy(other.d_weights, inherit);
 		}
 
 		_A_ Flow flow() const { return d_flow.val; }
@@ -95,6 +96,7 @@ namespace mk
 		_A_ Opacity opacity() const { return d_opacity.val; }
 		_A_ Space div() const { return d_space.val; }
 		_A_ Dimension layoutDim() const { return d_layoutDim.val; }
+		_A_ DimAlign& align() { return d_align.val; }
 		_A_ DimFloat& span() { return d_span.val; }
 		_A_ DimFloat& size() { return d_size.val; }
 		_A_ BoxFloat& padding() { return d_padding.val; }
@@ -110,6 +112,7 @@ namespace mk
 		StyleAttr<Opacity> d_opacity;
 		StyleAttr<Space> d_space;
 		StyleAttr<Dimension> d_layoutDim;
+		StyleAttr<DimAlign> d_align;
 		StyleAttr<DimFloat> d_span;
 		StyleAttr<DimFloat> d_size;
 		StyleAttr<BoxFloat> d_padding;
@@ -166,17 +169,19 @@ namespace mk
 			mShadow.copy(other.mShadow, inherit);
 		}
 
+		void setEmpty(bool empty) { mEmpty = empty; }
+
 		_A_ bool empty() const { return mEmpty; }
 		_A_ Colour& backgroundColour() { return mBackgroundColour.val; }
 		_A_ Colour& borderColour() { return mBorderColour.val; }
 		_A_ Colour& imageColour() { return mImageColour.val; }
 		_A_ Colour& textColour() { return mTextColour.val; }
 		_A_ const string& textFont() { return mTextFont.val; }
-		_A_ float textSize() { return mTextSize.val; }
-		_A_ bool textWrap() { return mTextWrap.val; }
+		_A_ float& textSize() { return mTextSize.val; }
+		_A_ bool& textWrap() { return mTextWrap.val; }
 		_A_ BoxFloat& borderWidth() { return mBorderWidth.val; }
 		_A_ BoxFloat& cornerRadius() { return mCornerRadius.val; }
-		_A_ bool weakCorners() { return mWeakCorners.val; }
+		_A_ bool& weakCorners() { return mWeakCorners.val; }
 		_A_ BoxFloat& padding() { return mPadding.val; }
 		_A_ BoxFloat& margin() { return mMargin.val; }
 		_A_ DimAlign& align() { return mAlign.val; }
@@ -239,6 +244,7 @@ namespace mk
 		_A_ InkStyle& skin() { return mSkin; }
 		_A_ _M_ size_t updated() { return mUpdated; }
 
+		void markUpdate() { ++mUpdated; }
 		void setUpdated(size_t update) { mUpdated = update; }
 
 		Type* styleType() { return mStyleType; }

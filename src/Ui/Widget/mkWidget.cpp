@@ -62,7 +62,7 @@ namespace mk
 		mParent = parent;
 
 		if(mFrame->frameType() != LAYER3D)
-			mParent->stripe().insert(mFrame.get(), index);
+			mParent->stripe().insert(*mFrame.get(), index);
 		else
 			mFrame->as<Layer>().bind();
 
@@ -124,10 +124,16 @@ namespace mk
 		//this->reset(style);
 	}
 
-	void Widget::reset(Style* style)
+	void Widget::resetStyle(Style* style)
 	{
 		mStyle = style;
 		mFrame->resetStyle();
+	}
+
+	void Widget::resetSkin(Style* style)
+	{
+		mStyle = style;
+		mFrame->updateStyle();
 	}
 
 	Style& Widget::fetchOverride(Style& style)

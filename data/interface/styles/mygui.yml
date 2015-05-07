@@ -54,6 +54,9 @@ Frame :
     padding : 4.0, 4.0, 4.0, 4.0
     image_skin : mygui/frame_assym, 4, 4, 6, 6
 
+Dockbar :
+    inherit_skin : Frame
+    
 TypeIn :
     copy_skin : Label
     image_skin : mygui/editbox, 6, 6, 8, 8
@@ -61,7 +64,6 @@ TypeIn :
 
 Dropdown :
     inherit_skin : TypeIn
-    align : LEFT, CENTER
     
 DropdownToggle :
     inherit_skin : Clear
@@ -148,6 +150,7 @@ SliderDisplay :
     
 ScrollerKnobY :
     inherit_skin : Clear
+    align : CENTER, LEFT
     image_skin : mygui/scrollerknoby, 5, 2, 7, 4
     decline_image_skin : hovered, pressed, activated
 

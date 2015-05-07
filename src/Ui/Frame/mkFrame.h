@@ -45,6 +45,7 @@ namespace mk
 		inline bool hidden() { return d_hidden; }
 		inline bool visible() { return d_visible; }
 		inline size_t index() { return d_index; }
+		inline bool flow() { return d_flow; }
 
 		inline Inkbox& inkbox() { return *d_inkbox.get(); }
 		inline Style& style() { return *d_style; }
@@ -70,8 +71,10 @@ namespace mk
 		void transfer(Stripe& stripe, size_t index);
 		void remove();
 
-		Frame* prev();
-		Frame* next();
+		Frame* before();
+
+		Frame& prev();
+		Frame& next();
 
 		bool first();
 		bool last();
@@ -145,7 +148,8 @@ namespace mk
 		inline float pwidth() { return width() - d_inkstyle->padding().x0() - d_inkstyle->padding().x1(); }
 		inline float pheight() { return height() - d_inkstyle->padding().y0() - d_inkstyle->padding().y1(); }
 
-		inline float doffset(Dimension dim) { return dsize(dim) + d_layout->margin()[dim]; }
+		inline float dextent(Dimension dim) { return dsize(dim) + dmargin(dim) * 2.f; }
+		inline float doffset(Dimension dim) { return dposition(dim) + dextent(dim); }
 
 		inline float dabsolute(Dimension dim) { return d_absolute[dim]; }
 		inline float dclippos(Dimension dim) { return d_clipPos[dim]; }
@@ -164,6 +168,7 @@ namespace mk
 		Dirty d_dirty;
 		bool d_hidden;
 		bool d_visible;
+		bool d_flow;
 		DimFloat d_absolute;
 		DimFloat d_clipPos;
 		DimFloat d_clipSize;

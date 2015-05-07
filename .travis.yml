@@ -30,5 +30,21 @@ script:
   - make VERBOSE=1
   - sudo make install
 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "g+kbqutuchcAb6+nrW2fJO0whDt1GYLrD5UmmCpK6fasI+3J82VEiywRWYCdifvrASp/XQv0aohdGcOZPwdP/3ii3MY876F626mNaMzAqV2lw6Lo0t8+Gpc1M3/WA/qUm1npjb1A+HzVOG5tQhQyiENjNKGURfh9EmghhWEjenQ="
+
+addons:
+  coverity_scan:
+    project:
+      name: "alexeyknyshev/kiui"
+      description: "Build submitted via Travis CI"
+    notification_email: alexey.knyshev@gmail.com
+    build_command_prepend: "make clean; cmake .."
+    build_command:   "make -j4"
+    branch_pattern: coverty_scan
+
 os:
   - linux

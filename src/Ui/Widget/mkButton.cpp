@@ -79,7 +79,6 @@ namespace mk
 		else
 			this->trigger();
 
-		//toggleState(HOVERED);
 		return true;
 	}
 
@@ -155,6 +154,13 @@ namespace mk
 		mStyle = &cls();
 		if(mOn)
 			this->toggleState(ACTIVATED);
+	}
+	
+	void Toggle::update(bool on)
+	{
+		if(on != mOn)
+			this->toggleState(ACTIVATED);
+		mOn = on;
 	}
 
 	void Toggle::toggle()

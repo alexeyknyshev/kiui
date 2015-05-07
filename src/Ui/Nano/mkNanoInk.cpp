@@ -20,6 +20,9 @@
 
 namespace mk
 {
+	bool NanoInk::sDebugDraw = false;
+	int NanoInk::sDebugBatch = 0;
+
 	inline float clamp(float v, float mn, float mx)
 	{
 		return (v > mx) ? mx : (v < mn) ? mn : v;
@@ -45,9 +48,9 @@ namespace mk
 		return isnan(a) ? b : (isnan(b) ? a : ((a > b) ? a : b));
 	}
 
-	void nvgRoundedBox(NVGcontext *ctx, float x, float y, float w, float h, float cr0, float cr1, float cr2, float cr3, Dimension fitDim = DIM_0)
+	void nvgRoundedBox(NVGcontext *ctx, float x, float y, float w, float h, float cr0, float cr1, float cr2, float cr3, Dimension fitDim = DIM_NULL)
 	{
-		if(fitDim == DIM_0)
+		if(fitDim == DIM_NULL)
 			nvgRoundedRect4(ctx, x, y, w, h, cr0, cr1, cr2, cr3);
 		else if(fitDim == DIM_X)
 			nvgRoundedRect4FitY(ctx, x, y, w, h, cr0, cr1, cr2, cr3);
@@ -78,7 +81,7 @@ namespace mk
 		, mImage(0)
 		, mOverlay(0)
 		, mTile(0)
-		, mFitCorners(DIM_0)
+		, mFitCorners(DIM_NULL)
 		, mImageUpdate(true)
 		, mTextUpdate(true)
 	{}
@@ -111,11 +114,29 @@ namespace mk
 
 	void NanoInk::drawImage()
 	{
+#if 1 // DEBUG
+		if(sDebugDraw && mVisible)
+		{
+			float left = mFrame.dabsolute(DIM_X) + mFrame.cleft();
+			float top = mFrame.dabsolute(DIM_Y) + mFrame.ctop();
+			float width = mFrame.cwidth();
+			float height = mFrame.cheight();
+
+			nvgBeginPath(mCtx);
+			nvgRect(mCtx, left + 0.5f, top + 0.5f, width - 1.f, height - 1.f);
+			nvgStrokeWidth(mCtx, 1.f);
+			nvgStrokeColor(mCtx, nvgColour(Colour::Red));
+			nvgStroke(mCtx);
+		}
+#endif
+
 		if(this->skin().mEmpty || !mVisible)
 			return;
 
+		++sDebugBatch;
+
 		if(!mImageCache)
-			mImageCache = nvgCreateDisplayList(10);
+			mImageCache = nvgCreateDisplayList(11);
 
 		if(mImageUpdate)
 			this->redrawImage();
@@ -131,7 +152,7 @@ namespace mk
 		float left = mFrame.cleft();
 		float top = mFrame.ctop();
 		float width = mFrame.cwidth();
-		float height = mFrame.cheight();;
+		float height = mFrame.cheight();
 
 		float pleft = mFrame.pleft();
 		float ptop = mFrame.ptop();
@@ -146,14 +167,6 @@ namespace mk
 
 		nvgResetDisplayList(mImageCache);
 		nvgBindDisplayList(mCtx, mImageCache);
-
-#if 0 // DEBUG
-		nvgBeginPath(mCtx);
-		nvgRect(mCtx, left + 0.5f, top + 0.5f, width - 1.f, height - 1.f);
-		nvgStrokeWidth(mCtx, 1.f);
-		nvgStrokeColor(mCtx, nvgColour(Colour::Red));
-		nvgStroke(mCtx);
-#endif
 
 		float contentWidth = contentSize(DIM_X) - skin.padding()[DIM_X] - skin.padding()[DIM_X + 2];
 		float contentHeight = contentSize(DIM_Y) - skin.padding()[DIM_Y] - skin.padding()[DIM_Y + 2];
@@ -286,7 +299,7 @@ namespace mk
 		float left = mFrame.cleft();
 		float top = mFrame.ctop();
 		float width = mFrame.cwidth();
-		float height = mFrame.cheight();;
+		float height = mFrame.cheight();
 
 		float pleft = mFrame.pleft();
 		float ptop = mFrame.ptop();
@@ -603,6 +616,8 @@ namespace mk
 		if(parent.mCorners.null() || !skin().mWeakCorners || !mFrame.flow())
 			return;
 
+		mFitCorners = mFrame.parent()->layoutDim();
+
 		if(mFrame.parent()->layoutDim() == DIM_X)
 		{
 			mCorners.setX0(fmaxf(0.f, parent.mCorners.x0() - mFrame.dposition(DIM_X)));
@@ -610,8 +625,6 @@ namespace mk
 
 			mCorners.setY0(fmaxf(0.f, parent.mCorners.y0() - (mFrame.parent()->dsize(DIM_X) - (mFrame.dposition(DIM_X) + mFrame.dsize(DIM_X)))));
 			mCorners.setX1(fmaxf(0.f, parent.mCorners.x1() - (mFrame.parent()->dsize(DIM_X) - (mFrame.dposition(DIM_X) + mFrame.dsize(DIM_X)))));
-
-			mFitCorners = DIM_X;
 		}
 		else if(mFrame.parent()->layoutDim() == DIM_Y)
 		{
@@ -620,8 +633,6 @@ namespace mk
 
 			mCorners.setX1(fmaxf(0.f, parent.mCorners.x1() - (mFrame.parent()->dsize(DIM_Y) - (mFrame.dposition(DIM_Y) + mFrame.dsize(DIM_Y)))));
 			mCorners.setY1(fmaxf(0.f, parent.mCorners.y1() - (mFrame.parent()->dsize(DIM_Y) - (mFrame.dposition(DIM_Y) + mFrame.dsize(DIM_Y)))));
-
-			mFitCorners = DIM_Y;
 		}
 	}
 

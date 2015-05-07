@@ -12,7 +12,7 @@ It is designed according to the following design goals :
 - Brevity and simplicity above everything else, especially in C++ code
 - Good for both an editor Ui and a game Ui
 
-![screenshot of the example window with a raw skin](kiui.png?raw=true)
+![screenshot of the example window with a raw skin](media/kiui.png?raw=true)
 
 Auto-Layout
 ===========
@@ -22,6 +22,14 @@ Every single element in kiUi auto-layouts ! You have nothing to do. No position 
 - Code the appearance : Just set your fonts, font-size, images, and kiUi will do the rest.
 
 The style can be defined and tweaked separately by an artist. Style are defined in C++ as of now, but Style Sheets are planned to come soon.
+
+Skins
+=====
+
+kiUi was conceived so that each element can be styled in a way very similar to CSS, through Style Sheets
+You can switch between Styles Sheets on the fly
+
+![switching between styles at runtime](media/themes.gif?raw=true)
 
 Usage
 ====
@@ -34,6 +42,8 @@ Expandbox& expandbox = window.emplace<Expandbox>("Collapsable box");
 Label& label = expandbox.emplace<Label>("kiUi says hello.");
 Button& button = expand.emplace<Button>("Push me");
 ```
+
+For a more in-depth usage example look at the full demo implementation : [Example](src/Ui/mkUiExample.cpp)
 
 Nano
 ====
@@ -60,18 +70,11 @@ Widgets
 - Radiobutton
 - Dropdown
 
-Skins
-=====
-
-kiUi was conceived so that each element can be styled in a way very similar to CSS
 
 Editor
 ======
 
 kiUi will come with a simple editor which also uses kiUi for its interface
-
-![screenshot of the WIP editor for kiUi](editor.png?raw=true)
-
 
 
 ## License
